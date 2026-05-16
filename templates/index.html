@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инвестиционный калькулятор</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="page">
+    <aside class="sidebar">
+        <div class="sidebar-panel">
+            <div class="logo">%</div>
+            <h2>Калькулятор</h2>
+            <nav>
+                <a href="#calculator">Расчёт</a>
+                <a href="#history">История</a>
+                <a href="#chart">График</a>
+                <a href="#table">Таблица</a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="content">
+        <section class="hero" id="calculator">
+            <p class="small-title">Инвестиции</p>
+            <h1>Инвестиционный калькулятор</h1>
+            <p class="description">
+                Расчёт сложного процента, пополнений, налогов, инфляции и цели инвестирования.
+            </p>
+        </section>
+
+        <section class="calculator-grid">
+            <form class="card form-card" method="post">
+                <div class="mode-panel">
+                    <p class="form-title">Что нужно вычислить?</p>
+                    <div class="tabs mode-tabs">
+                    <label class="tab-label">
+                        <input type="radio" name="calc_type" value="income" {% if values.calc_type == 'income' %}checked{% endif %}>
+                        <span>Доход</span>
+                    </label>
+                    <label class="tab-label">
+                        <input type="radio" name="calc_type" value="rate" {% if values.calc_type == 'rate' %}checked{% endif %}>
+                        <span>Ставку</span>
+                    </label>
+                    <label class="tab-label">
+                        <input type="radio" name="calc_type" value="start_sum" {% if values.calc_type == 'start_sum' %}checked{% endif %}>
+                        <span>Старт</span>
+                    </label>
+                    <label class="tab-label">
+                        <input type="radio" name="calc_type" value="period" {% if values.calc_type == 'period' %}checked{% endif %}>
+                        <span>Срок</span>
+                    </label>
+                    <label class="tab-label">
+                        <input type="radio" name="calc_type" value="payment" {% if values.calc_type == 'payment' %}checked{% endif %}>
+                        <span>Пополнения</span>
+                    </label>
+                    </div>
+                </div>
+
+                <div class="field goal-field">
+                    <label>Ваша цель, ₽</label>
+                    <input type="number" name="goal" value="{{ values.goal }}" min="0" step="1000">
+                </div>
+
+                <div class="field start-sum-field">
+                    <label>Стартовый капитал, ₽</label>
+                    <input type="number" name="start_sum" value="{{ values.start_sum }}" min="0" step="1000">
+                </div>
+
+                <div class="two-columns period-field">
+                    <div class="field">
+                        <label>Срок</label>
+                        <input type="number" name="period" value="{{ values.period }}" min="1" step="1">
+                    </div>
+                    <div class="field">
+                        <label>Единицы</label>
+                        <select name="period_unit">
+                            <option value="years" {% if values.period_unit == 'years' %}selected{% endif %}>лет</option>
+                            <option value="months" {% if values.period_unit == 'months' %}selected{% endif %}>месяцев</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field rate-field">
+                    <label>Ставка, % годовых</label>
+                    <input type="number" name="rate" value="{{ values.rate }}" min="0" step="0.1">
+                </div>
+
+                <label class="checkbox-line">
+                    <input type="checkbox" name="reinvest" value="1" {% if values.reinvest %}checked{% endif %}>
+                    <span>Реинвестировать доход</span>
+                </label>
+
+                <div class="field reinvest-field">
+                    <label>Период реинвестирования</label>
+                    <select name="reinvest_period">
+                        <option value="1" {% if values.reinvest_period == '1' %}selected{% endif %}>Раз в месяц</option>
+                        <option value="3" {% if values.reinvest_period == '3' %}selected{% endif %}>Раз в квартал</option>
+                        <option value="6" {% if values.reinvest_period == '6' %}selected{% endif %}>Раз в полгода</option>
+                        <option value="12" {% if values.reinvest_period == '12' %}selected{% endif %}>Раз в год</option>
+                        <option value="daily" {% if values.reinvest_period == 'daily' %}selected{% endif %}>Каждый день</option>
+                    </select>
+                </div>
+
+                <div class="two-columns payment-field">
+                    <div class="field">
+                        <label>Доп. вложения / изъятия, ₽</label>
+                        <input type="number" name="monthly_payment" value="{{ values.monthly_payment }}" step="1000">
+                    </div>
+                    <div class="field">
+                        <label>Периодичность</label>
+                        <select name="add_period">
+                            <option value="1" {% if values.add_period == '1' %}selected{% endif %}>Раз в месяц</option>
+                            <option value="3" {% if values.add_period == '3' %}selected{% endif %}>Раз в квартал</option>
+                            <option value="6" {% if values.add_period == '6' %}selected{% endif %}>Раз в полгода</option>
+                            <option value="12" {% if values.add_period == '12' %}selected{% endif %}>Раз в год</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field payment-field">
+                    <label>Ежегодно увеличивать пополнения на, %</label>
+                    <input type="number" name="add_index" value="{{ values.add_index }}" min="0" max="100" step="1">
+                </div>
+
+                <label class="checkbox-line">
+                    <input type="checkbox" name="tax_enabled" value="1" {% if values.tax_enabled %}checked{% endif %}>
+                    <span>Учитывать налог</span>
+                </label>
+
+                <div class="field tax-field">
+                    <label>Налог, %</label>
+                    <input type="number" name="tax" value="{{ values.tax }}" min="0" max="50" step="1">
+                    <div class="presets">
+                        <button type="button" data-name="tax" data-value="13">13%</button>
+                        <button type="button" data-name="tax" data-value="15">15%</button>
+                        <button type="button" data-name="tax" data-value="30">30%</button>
+                    </div>
+                </div>
+
+                <label class="checkbox-line">
+                    <input type="checkbox" name="inflation_enabled" value="1" {% if values.inflation_enabled %}checked{% endif %}>
+                    <span>Учитывать инфляцию</span>
+                </label>
+
+                <div class="field inflation-field">
+                    <label>Инфляция, % в год</label>
+                    <input type="number" name="inflation" value="{{ values.inflation }}" min="0" step="0.01">
+                    <div class="presets">
+                        <button type="button" data-name="inflation" data-value="5.91">5.91%</button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>После расчёта показать</label>
+                    <select name="view_interval">
+                        <option value="years" {% if values.view_interval == 'years' %}selected{% endif %}>По годам</option>
+                        <option value="months" {% if values.view_interval == 'months' %}selected{% endif %}>По месяцам</option>
+                    </select>
+                </div>
+
+                <button class="main-button" type="submit">Рассчитать</button>
+            </form>
+
+            <div class="card result-card">
+                <p class="small-title">Итог расчёта</p>
+                <h2>{{ '{:,.2f}'.format(result.final_sum).replace(',', ' ') }} ₽</h2>
+
+                {% if extra_result %}
+                <div class="extra-result">{{ extra_result }}</div>
+                {% endif %}
+
+                <div class="result-list">
+                    <div>
+                        <span>Внесено денег</span>
+                        <b>{{ '{:,.2f}'.format(result.total_payments).replace(',', ' ') }} ₽</b>
+                    </div>
+                    <div>
+                        <span>Доход</span>
+                        <b class="green">{{ '{:,.2f}'.format(result.profit).replace(',', ' ') }} ₽</b>
+                    </div>
+                    <div>
+                        <span>Налог</span>
+                        <b>{{ '{:,.2f}'.format(result.total_tax).replace(',', ' ') }} ₽</b>
+                    </div>
+                    <div>
+                        <span>С учётом инфляции</span>
+                        <b>{{ '{:,.2f}'.format(result.real_final_sum).replace(',', ' ') }} ₽</b>
+                    </div>
+                    <div>
+                        <span>Потери от инфляции</span>
+                        <b>{{ '{:,.2f}'.format(result.inflation_loss).replace(',', ' ') }} ₽</b>
+                    </div>
+                    <div>
+                        <span>Срок</span>
+                        <b>{{ result.months }} мес.</b>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card compact-card history-card" id="history">
+            <div class="compact-header table-header">
+                <div>
+                    <p class="small-title">История</p>
+                    <h2>Последние расчёты</h2>
+                </div>
+                <div class="history-actions">
+                    <button type="button" class="history-all-button" data-history="all">Вся история на графике</button>
+                    <form method="post" action="{{ url_for('clear_history') }}">
+                        <button type="submit" class="clear-history-button">Очистить</button>
+                    </form>
+                </div>
+            </div>
+
+            {% if calculation_history %}
+            <div class="history-list">
+                {% for item in calculation_history %}
+                <button type="button" class="history-item {% if loop.first %}active{% endif %}" data-history-id="{{ item.id }}">
+                    <span>{{ item.type_name }}</span>
+                    <b>{{ '{:,.2f}'.format(item.final_sum).replace(',', ' ') }} ₽</b>
+                    <small>Доход: {{ '{:,.2f}'.format(item.profit).replace(',', ' ') }} ₽</small>
+                </button>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="empty-history">История появится после первого расчёта.</p>
+            {% endif %}
+        </section>
+
+        <section class="card chart-card compact-card" id="chart">
+            <div class="compact-header table-header">
+                <div>
+                    <p class="small-title">Динамика</p>
+                    <h2>Рост суммы</h2>
+                </div>
+                <div class="chart-tabs">
+                    <button type="button" class="chart-tab {% if values.view_interval == 'years' %}active{% endif %}" data-chart="years">По годам</button>
+                    <button type="button" class="chart-tab {% if values.view_interval == 'months' %}active{% endif %}" data-chart="months">По месяцам</button>
+                </div>
+            </div>
+            <div class="chart-type-tabs">
+                <button type="button" class="chart-type-tab active" data-chart-type="growth">Рост капитала</button>
+                <button type="button" class="chart-type-tab" data-chart-type="structure">Состав суммы</button>
+                <button type="button" class="chart-type-tab" data-chart-type="profit">Доходность</button>
+                <button type="button" class="chart-type-tab" data-chart-type="inflation">Инфляция</button>
+            </div>
+            <canvas id="moneyChart"></canvas>
+        </section>
+
+        <section class="card compact-card" id="table">
+            <div class="compact-header table-header">
+                <div>
+                    <p class="small-title">Подробности</p>
+                    <h2>Таблица расчёта</h2>
+                </div>
+                <div class="table-tabs">
+                    <button type="button" class="table-tab {% if values.view_interval == 'years' %}active{% endif %}" data-table="years-table">По годам</button>
+                    <button type="button" class="table-tab {% if values.view_interval == 'months' %}active{% endif %}" data-table="months-table">По месяцам</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper table-view {% if values.view_interval == 'years' %}active{% endif %}" id="years-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Год</th>
+                        <th>Итоговая сумма</th>
+                        <th>Внесено</th>
+                        <th>Доход</th>
+                        <th>С учётом инфляции</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in result.years_data %}
+                    <tr>
+                        <td>{{ row.year }}</td>
+                        <td>{{ '{:,.2f}'.format(row.balance).replace(',', ' ') }} ₽</td>
+                        <td>{{ '{:,.2f}'.format(row.payments).replace(',', ' ') }} ₽</td>
+                        <td class="green">{{ '{:,.2f}'.format(row.profit).replace(',', ' ') }} ₽</td>
+                        <td>{{ '{:,.2f}'.format(row.real_sum).replace(',', ' ') }} ₽</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-wrapper table-view {% if values.view_interval == 'months' %}active{% endif %}" id="months-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Месяц</th>
+                        <th>Год</th>
+                        <th>Итоговая сумма</th>
+                        <th>Внесено</th>
+                        <th>Доход</th>
+                        <th>С учётом инфляции</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in result.months_data %}
+                    <tr>
+                        <td>{{ row.month }}</td>
+                        <td>{{ row.year }}</td>
+                        <td>{{ '{:,.2f}'.format(row.balance).replace(',', ' ') }} ₽</td>
+                        <td>{{ '{:,.2f}'.format(row.payments).replace(',', ' ') }} ₽</td>
+                        <td class="green">{{ '{:,.2f}'.format(row.profit).replace(',', ' ') }} ₽</td>
+                        <td>{{ '{:,.2f}'.format(row.real_sum).replace(',', ' ') }} ₽</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    const years = {{ result.years_data | map(attribute='year') | list | tojson }};
+    const balances = {{ result.years_data | map(attribute='balance') | list | tojson }};
+    const payments = {{ result.years_data | map(attribute='payments') | list | tojson }};
+    const profits = {{ result.years_data | map(attribute='profit') | list | tojson }};
+    const realSums = {{ result.years_data | map(attribute='real_sum') | list | tojson }};
+
+    const months = {{ result.months_data | map(attribute='month') | list | tojson }};
+    const monthBalances = {{ result.months_data | map(attribute='balance') | list | tojson }};
+    const monthPayments = {{ result.months_data | map(attribute='payments') | list | tojson }};
+    const monthProfits = {{ result.months_data | map(attribute='profit') | list | tojson }};
+    const monthRealSums = {{ result.months_data | map(attribute='real_sum') | list | tojson }};
+    const startViewInterval = {{ values.view_interval | tojson }};
+    const historyData = {{ calculation_history | tojson }};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

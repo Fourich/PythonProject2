@@ -1,0 +1,523 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(22, 163, 74, 0.12), transparent 34%),
+        linear-gradient(135deg, #eef6f1 0%, #f7f8fb 45%, #eef2ff 100%);
+    color: #1f2937;
+}
+
+.page {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 26px;
+    min-height: 100vh;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+.sidebar {
+    position: sticky;
+    top: 28px;
+    height: calc(100vh - 56px);
+    padding-left: 28px;
+}
+
+.sidebar-panel {
+    height: 100%;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(14px);
+}
+
+.logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    background: #16a34a;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    box-shadow: 0 12px 24px rgba(22, 163, 74, 0.3);
+}
+
+.sidebar h2 {
+    margin: 0 0 28px;
+    font-size: 23px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #4b5563;
+    padding: 13px 14px;
+    border-radius: 15px;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    color: #16a34a;
+    background: #f0fdf4;
+}
+
+.content {
+    width: 100%;
+    min-width: 0;
+}
+
+.hero {
+    margin: 8px 0 22px;
+}
+
+.small-title {
+    margin: 0 0 7px;
+    color: #16a34a;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+}
+
+h1 {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.1;
+}
+
+h2 {
+    margin: 0;
+}
+
+.description {
+    max-width: 720px;
+    color: #6b7280;
+    font-size: 17px;
+    line-height: 1.45;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: minmax(370px, 430px) 1fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    border-radius: 26px;
+    padding: 24px;
+    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.07);
+    backdrop-filter: blur(10px);
+}
+
+.mode-panel {
+    margin: -8px -8px 18px;
+    padding: 10px;
+    border-radius: 22px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+}
+
+.tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.tab-label {
+    cursor: pointer;
+    margin: 0;
+}
+
+.tab-label input {
+    display: none;
+}
+
+.tab-label span {
+    display: block;
+    text-align: center;
+    border-radius: 14px;
+    padding: 10px 8px;
+    color: #6b7280;
+    font-size: 14px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+}
+
+.tab-label input:checked + span {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 10px 18px rgba(22, 163, 74, 0.18);
+}
+
+.form-title {
+    margin: 0 0 10px;
+    font-weight: 700;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    color: #374151;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.field {
+    margin-bottom: 13px;
+}
+
+.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.checkbox-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.checkbox-line input {
+    width: auto;
+    margin: 0;
+}
+
+.presets {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.presets button {
+    border: 0;
+    border-radius: 10px;
+    padding: 7px 10px;
+    background: #f0fdf4;
+    color: #16a34a;
+    cursor: pointer;
+}
+
+input,
+select {
+    width: 100%;
+    margin-top: 6px;
+    padding: 12px 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 14px;
+    font-size: 15px;
+    outline: none;
+    background: #ffffff;
+}
+
+input:focus,
+select:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px #dcfce7;
+}
+
+.main-button {
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    padding: 15px;
+    background: #16a34a;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.main-button:hover {
+    background: #15803d;
+}
+
+.result-card h2 {
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.result-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.extra-result {
+    margin-bottom: 16px;
+    padding: 14px;
+    border-radius: 16px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-weight: 700;
+}
+
+.result-list div {
+    padding: 15px;
+    border-radius: 17px;
+    background: #f9fafb;
+}
+
+.result-list span {
+    display: block;
+    color: #6b7280;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.green {
+    color: #16a34a;
+}
+
+.chart-card,
+#table,
+.history-card {
+    margin-top: 18px;
+}
+
+.compact-card {
+    padding: 22px;
+    border-radius: 24px;
+}
+
+.compact-header {
+    margin-bottom: 18px;
+}
+
+.compact-header h2 {
+    font-size: 22px;
+}
+
+.chart-card {
+    height: 480px;
+}
+
+#moneyChart {
+    width: 100%;
+    height: 330px;
+    max-height: 330px;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-actions form {
+    margin: 0;
+}
+
+.history-all-button,
+.clear-history-button {
+    border: 0;
+    border-radius: 12px;
+    padding: 10px 13px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.history-all-button {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.history-all-button.active {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.clear-history-button {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.history-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.history-item {
+    padding: 14px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background: #f9fafb;
+    text-align: left;
+    cursor: pointer;
+}
+
+.history-item.active {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.history-item span,
+.history-item small {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.history-item b {
+    display: block;
+    margin: 6px 0;
+    color: #16a34a;
+}
+
+.empty-history {
+    margin: 0;
+    color: #6b7280;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.table-tabs,
+.chart-tabs,
+.chart-type-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 5px;
+    border-radius: 14px;
+    background: #f3f4f6;
+}
+
+.chart-type-tabs {
+    width: fit-content;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.table-tab,
+.chart-tab,
+.chart-type-tab {
+    border: 0;
+    border-radius: 11px;
+    padding: 9px 13px;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.table-tab.active,
+.chart-tab.active,
+.chart-type-tab.active {
+    background: #ffffff;
+    color: #16a34a;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-view {
+    display: none;
+}
+
+.table-view.active {
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+th,
+td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+th {
+    color: #6b7280;
+    font-size: 14px;
+    background: #ffffff;
+}
+
+@media (max-width: 1100px) {
+    .page {
+        display: block;
+        padding: 18px;
+    }
+
+    .sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        padding-left: 0;
+        margin-bottom: 18px;
+    }
+
+    .sidebar-panel {
+        height: auto;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-list,
+    .history-list {
+        grid-template-columns: 1fr;
+    }
+
+    .table-header {
+        display: block;
+    }
+
+    .table-tabs,
+    .chart-tabs,
+    .chart-type-tabs {
+        margin-top: 12px;
+        width: fit-content;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+}
